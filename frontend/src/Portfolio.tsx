@@ -6,6 +6,15 @@ import site from './site.json'
 
 export const mainLinks = [ ['/', 'Home'], ['/projects', 'Projects'], ['/experience', 'Experience'], ['/about', 'About'], ['/resume', 'Resume'], ['/contact', 'Contact'] ] as const
 
+const resumePath = site.resume as string | null
+const resumeUrl = resumePath ? `${import.meta.env.BASE_URL}${resumePath.replace(/^\//, '')}` : undefined
+
+export function ResumeLink({ children, className }: { children: ReactNode; className?: string }) {
+  return resumeUrl
+    ? <a className={className} href={resumeUrl} target="_blank" rel="noopener noreferrer">{children}</a>
+    : <Link className={className} to="/resume">{children}</Link>
+}
+
 export const pageHeadings: Record<string, { id: string; title: string; level: number }[]> = {
   '/': ['Selected projects', 'Experience', 'Technical skills', 'Beyond the code'].map((title) => ({ id: title.toLowerCase().replaceAll(' ', '-'), title, level: 2 })),
   '/projects': [{ id: 'featured-work', title: 'Featured work', level: 2 }, { id: 'further-work', title: 'Further work & demonstrations', level: 2 }],
@@ -62,7 +71,7 @@ export function HomePage() {
       <p className="professional-headline">{site.headline}</p>
       <p className="education-line">{site.school} <span aria-hidden="true">·</span> Expected graduation {site.graduation}</p>
       <p className="intro-copy">I build software for real problems, from commercial websites to community mapping tools. I’m interested in full-stack development, AI, automation, and healthcare technology.</p>
-      <div className="portfolio-actions"><Link className="primary-button" to="/projects">View Projects <ArrowRight size={15} aria-hidden="true" /></Link><Link className="secondary-button" to="/resume">View Resume</Link><ProfileLink kind="github">GitHub</ProfileLink><Link to="/contact">Contact Me</Link></div>
+      <div className="portfolio-actions"><Link className="primary-button" to="/projects">View Projects <ArrowRight size={15} aria-hidden="true" /></Link><ResumeLink className="secondary-button">View Resume</ResumeLink><ProfileLink kind="github">GitHub</ProfileLink><Link to="/contact">Contact Me</Link></div>
     </section>
     <section aria-labelledby="selected-projects"><div className="section-heading"><h2 id="selected-projects">Selected projects</h2><Link to="/projects">All projects <ArrowRight size={13} aria-hidden="true" /></Link></div>
       <div className="project-grid">{projects.filter((article) => article.project?.featured).map((article) => <ProjectPreview key={article.slug} article={article} compact />)}</div>
@@ -82,7 +91,7 @@ export function ProjectsPage() {
 }
 
 export function ResumePage() {
-  const resume = site.resume as string | null
+  const resume = resumeUrl
   return <PortfolioPage title="Resume" label="Career overview"><h2 id="resume-document">Resume document</h2>
     {resume ? <><p>Open the PDF in your browser or download a copy.</p><div className="portfolio-actions"><a className="primary-button" href={resume} target="_blank" rel="noopener noreferrer">View resume PDF <ExternalLink size={14} aria-hidden="true" /></a><a className="secondary-button" href={resume} download>Download PDF <Download size={14} aria-hidden="true" /></a></div></>
       : <div className="content-notice"><strong>Resume PDF coming soon</strong><p>A downloadable resume has not been provided yet. This page is a summary of my background; the PDF will be linked here when available.</p></div>}

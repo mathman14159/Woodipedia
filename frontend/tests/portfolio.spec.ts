@@ -39,7 +39,7 @@ test('all career routes and their internal navigation resolve, with no broken fr
     await expect(page.locator('main h2:empty')).toHaveCount(0)
     const links = await page.locator('a').evaluateAll((anchors) => anchors.map((anchor) => anchor.getAttribute('href') || ''))
     for (const href of links) {
-      if (href.startsWith('/') && !href.startsWith('//')) internal.add(href.split('#')[0])
+      if (href.startsWith('/') && !href.startsWith('//') && !/\.pdf$/i.test(href)) internal.add(href.split('#')[0])
       if (href.startsWith('#')) expect(await page.locator(`[id="${decodeURIComponent(href.slice(1))}"]`).count(), `${route}: ${href}`).toBe(1)
     }
     const brokenImages = await page.locator('img').evaluateAll((images) => images.filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.src))
@@ -52,7 +52,7 @@ test('all career routes and their internal navigation resolve, with no broken fr
   expect(failures).toEqual([])
 })
 
-test('contact uses supplied profiles and resume clearly reports its missing document', async ({ page }) => {
+test('contact uses supplied profiles and resume links open the supplied PDF in a new tab', async ({ page, request }) => {
   await page.goto('/contact')
   const main = page.getByRole('main')
   await expect(main.getByRole('link', { name: 'quentin.wood14159@gmail.com' })).toHaveAttribute('href', 'mailto:quentin.wood14159@gmail.com')
@@ -60,9 +60,33 @@ test('contact uses supplied profiles and resume clearly reports its missing docu
   await expect(main.getByRole('link', { name: 'View LinkedIn profile' })).toHaveAttribute('href', 'https://www.linkedin.com/in/quentin-wood141')
   await expect(main.getByRole('link', { name: 'View GitHub profile' })).toHaveAttribute('rel', 'noopener noreferrer')
   await page.goto('/resume')
-  await expect(page.getByText('Resume PDF coming soon')).toBeVisible()
-  await expect(page.locator('a[download]')).toHaveCount(0)
+  await expect(page.getByText('Resume PDF coming soon')).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'View resume PDF' })).toHaveAttribute('href', '/Resume.pdf')
+  await expect(page.locator('a[download]')).toHaveAttribute('href', '/Resume.pdf')
   await expect(page.getByRole('main')).toContainText('Junior Software Developer')
+  const pdf = await request.get('/Resume.pdf')
+  expect(pdf.ok()).toBe(true)
+  expect(pdf.headers()['content-type']).toContain('application/pdf')
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-')
+
+  await page.goto('/')
+  const resumeLinks = page.getByRole('link', { name: /^(View )?Resume$/ })
+  await expect(resumeLinks).toHaveCount(3)
+  for (const link of await resumeLinks.all()) {
+    await expect(link).toHaveAttribute('href', '/Resume.pdf')
+    await expect(link).toHaveAttribute('target', '_blank')
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  }
+  const popupPromise = page.waitForEvent('popup')
+  await page.getByRole('link', { name: 'View Resume', exact: true }).click()
+  const popup = await popupPromise
+  await expect(popup).toHaveURL(/\/Resume\.pdf$/)
+  await expect(page.locator('h1')).toHaveText('Quentin Wood')
+  await popup.close()
+  await page.getByRole('button', { name: 'Toggle main menu' }).click()
+  const menuResume = page.getByRole('navigation', { name: 'Main menu', exact: true }).getByRole('link', { name: 'Resume', exact: true })
+  await expect(menuResume).toHaveAttribute('href', '/Resume.pdf')
+  await expect(menuResume).toHaveAttribute('target', '_blank')
 })
 
 test('metadata follows navigation and preserves canonical article paths', async ({ page }) => {

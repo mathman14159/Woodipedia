@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import { ChevronDown, ChevronRight, ExternalLink, Menu, Search } from 'lucide-react'
 import { Article, articleUrl, articles, getArticle, prepareWikiLinks } from './content'
-import { ContactPage, HomePage, mainLinks, pageHeadings, ProjectsPage, ResumePage } from './Portfolio'
+import { ContactPage, HomePage, mainLinks, pageHeadings, ProjectsPage, ResumeLink, ResumePage } from './Portfolio'
 import { articleAtPath, Metadata } from './Metadata'
 
 type Preferences = { text: 'small' | 'standard' | 'large'; width: 'standard' | 'wide'; theme: 'light' | 'dark' }
@@ -60,7 +60,7 @@ function WikiHeader() {
         </Link>
         {menuOpen && <nav id="main-menu" className="header-menu" aria-label="Main menu">
           <strong>Main menu</strong>
-          {mainLinks.map(([path, label]) => <NavLink key={path} to={path} end>{label}</NavLink>)}
+          {mainLinks.map(([path, label]) => path === '/resume' ? <ResumeLink key={path}>{label}</ResumeLink> : <NavLink key={path} to={path} end>{label}</NavLink>)}
           <Link to="/wiki/Quentin_Wood">Original biography</Link>
         </nav>}
       </div>
@@ -72,7 +72,7 @@ function WikiHeader() {
           {suggestions.map((item) => <Link key={item.slug} to={articleUrl(item.title)} onClick={() => { setQuery(''); setFocused(false) }}><strong>{item.title}</strong><span>{item.description}</span></Link>)}
         </div>}
       </form>
-      <nav className="header-links" aria-label="Primary navigation">{mainLinks.map(([path, label]) => <NavLink key={path} to={path} end>{label}</NavLink>)}</nav>
+      <nav className="header-links" aria-label="Primary navigation">{mainLinks.map(([path, label]) => path === '/resume' ? <ResumeLink key={path}>{label}</ResumeLink> : <NavLink key={path} to={path} end>{label}</NavLink>)}</nav>
     </div>
   </header>
 }
@@ -131,6 +131,7 @@ function ArticleTabs({ article }: { article?: Article }) {
 }
 
 function WikiAnchor({ href = '', children, ...props }: React.ComponentProps<'a'>) {
+  if (href === '/resume') return <ResumeLink className={props.className}>{children}</ResumeLink>
   if (href.startsWith('/wiki/')) {
     const slug = href.slice('/wiki/'.length)
     const exists = !!getArticle(slug)
@@ -222,7 +223,7 @@ function Shell() {
       <Route path="/" element={<HomePage />} /><Route path="/projects" element={<ProjectsPage />} /><Route path="/resume" element={<ResumePage />} /><Route path="/contact" element={<ContactPage />} />
       {articles.filter((item) => item.route).map((item) => <Route key={item.slug} path={item.route} element={<ArticleView key={item.slug} article={item} />} />)}
       <Route path="/wiki/:slug" element={<ArticleRoute />} /><Route path="/search" element={<SearchPage />} /><Route path="*" element={<MissingArticle title="Page not found" />} /></Routes><Appearance preferences={preferences} update={update} /></div>
-    <footer className="site-footer"><nav aria-label="Footer navigation">{mainLinks.map(([path, label]) => <Link key={path} to={path}>{label}</Link>)}</nav><p>Woodpedia is Quentin Wood’s independent portfolio. It is not affiliated with Wikipedia or the Wikimedia Foundation.</p><p><Link to="/wiki/Quentin_Wood">Original biography</Link></p></footer>
+    <footer className="site-footer"><nav aria-label="Footer navigation">{mainLinks.map(([path, label]) => path === '/resume' ? <ResumeLink key={path}>{label}</ResumeLink> : <Link key={path} to={path}>{label}</Link>)}</nav><p>Woodpedia is Quentin Wood’s independent portfolio. It is not affiliated with Wikipedia or the Wikimedia Foundation.</p><p><Link to="/wiki/Quentin_Wood">Original biography</Link></p></footer>
   </div>
 }
 

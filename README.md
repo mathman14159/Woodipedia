@@ -13,7 +13,7 @@ Woodpedia is not affiliated with Wikipedia or the Wikimedia Foundation. The logo
 | `/projects/:slug` | Article-style technical case studies |
 | `/experience` | Touch of Care, Mines Formula involvement, leadership, and education |
 | `/about` | Rural Colorado background and the personal story behind the work |
-| `/resume` | Career summary and an explicit missing-PDF notice until a real resume is supplied |
+| `/resume` | Career summary with PDF view and download actions; Resume navigation links open `/Resume.pdf` in a new tab |
 | `/contact` | Quentin’s supplied email, GitHub, and LinkedIn links |
 | `/wiki/:slug` | Preserved original articles and aliases |
 
@@ -67,7 +67,6 @@ Public article tabs link to Projects and Contact. Existing `?view=edit`, `?view=
 
 ## Information still to supply
 
-- **Resume:** place the actual PDF in `frontend/public/resume.pdf` and set `resume` in `frontend/src/site.json` to `/resume.pdf`. View and download actions then replace the placeholder. The build checks that a configured local PDF exists; no substitute resume has been fabricated.
 - **Employment and involvement dates:** exact Touch of Care dates, Mines Formula dates and formal role. The title **Junior Software Developer** was confirmed by Quentin.
 - **Project evidence:** screenshots, project-specific repository/demo URLs, and deeper architecture, decisions, testing, and outcomes for projects whose source is outside this repository. No business metrics, emergency-response results, or official park partnership is inferred.
 - **Personal learning story:** a TODO in the About article reserves Quentin’s own account of how he started programming and taught himself. The original articles do not describe those specifics.
@@ -76,6 +75,8 @@ Public article tabs link to Projects and Contact. Existing `?view=edit`, `?view=
 Contact information is configured using Quentin’s supplied values. GitHub returned HTTP 200 during link validation. LinkedIn returned HTTP 999 to the automated check, so its destination could not be independently verified; its link matches the supplied profile URL.
 
 ## Build, test, and hosting
+
+GitHub Pages deploys through `.github/workflows/jekyll-gh-pages.yml` (the filename is retained, but it builds Vite). The workflow reads the public URL and base path from GitHub Pages settings, so custom domains use `/` and default project sites use `/<repository>/`. After changing the custom domain in GitHub, rerun the workflow or push a commit to rebuild asset and navigation URLs for that domain.
 
 ```powershell
 cd frontend
