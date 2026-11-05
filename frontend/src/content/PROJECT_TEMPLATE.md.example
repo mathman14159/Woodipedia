@@ -1,0 +1,56 @@
+---
+title: Project title
+description: A one-sentence problem and solution using only supported facts.
+type: Software project
+route: /projects/your-project
+project:
+  order: 8
+  featured: false
+  name: Project title
+  area: Engineering area
+  technologies: []
+  contribution: Describe your actual contributions.
+  # outcome: A verified result, if available.
+  # repository: A real, public repository URL.
+  # demo: A real demo URL.
+infobox:
+  Project: Project title
+categories: [Software projects]
+# Optional: image, imageCaption, imageWidth, imageHeight.
+---
+
+## Project overview
+
+Describe the work and its context.
+
+## The problem
+
+Who needed this, and what were they trying to do?
+
+## My role and contributions
+
+Distinguish your work from collaborators’ work.
+
+## Technologies and architecture
+
+Explain the implemented components and their data flow.
+
+## Technical challenges and decisions
+
+Describe a specific tradeoff and the evidence behind your choice.
+
+## Implementation and engineering process
+
+Explain how you built and checked it. Include a short, relevant code example if useful.
+
+## Results and impact
+
+Use verified outcomes. Clearly identify missing measurements.
+
+## Lessons and potential improvements
+
+Separate what you learned from proposed future work.
+
+## Screenshots and links
+
+Add only real, public assets and destinations. Use [[Quentin Wood]] for an internal article link.

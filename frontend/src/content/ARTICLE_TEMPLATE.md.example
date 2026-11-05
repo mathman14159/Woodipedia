@@ -1,0 +1,41 @@
+---
+title: New Article
+description: A short search description
+type: Article
+image: /images/example.jpg
+imageCaption: A caption for the image
+infobox:
+  Subject: "[Add a value]"
+  Status: Draft
+categories:
+  - Draft articles
+---
+
+**New Article** is a short introduction. Replace this text with your own.
+
+Link to a local page with [[Quentin Wood]] or [[Quentin Wood|a custom label]].
+Link to the real encyclopedia with [[wikipedia:Computer science]] or
+[[wikipedia:Python (programming language)|Python]].
+An uncreated local page such as [[Future article]] appears as a red link.
+
+## Background
+
+Add prose here. For a numbered citation, use a footnote.[^example]
+
+### Details
+
+Subheadings are added to the table of contents.
+
+## See also
+
+* [[Quentin Wood]]
+
+## References
+
+Add source details here, or use footnotes as below.
+
+## External links
+
+* [Example website](https://example.com)
+
+[^example]: Replace with a real source URL and description.

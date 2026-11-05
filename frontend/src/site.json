@@ -1,0 +1,16 @@
+{
+  "name": "Quentin Wood",
+  "headline": "Computer Science Student · Software Developer",
+  "school": "Colorado School of Mines",
+  "graduation": "May 2030",
+  "email": "quentin.wood14159@gmail.com",
+  "github": "https://github.com/mathman14159",
+  "linkedin": "https://www.linkedin.com/in/quentin-wood141",
+  "resume": null,
+  "pages": {
+    "/": { "title": "Quentin Wood — Software Developer & CS Student", "description": "Quentin Wood is a computer science student at Colorado School of Mines, graduating May 2030. Explore software projects, engineering experience, and technical case studies." },
+    "/projects": { "title": "Projects — Quentin Wood", "description": "Software projects by Quentin Wood: full-stack commerce, telemetry, wildfire mapping, Unity games, and wildlife surveys." },
+    "/resume": { "title": "Resume — Quentin Wood", "description": "Education, software development experience, and selected work by Quentin Wood, computer science student at Colorado School of Mines." },
+    "/contact": { "title": "Contact — Quentin Wood", "description": "Connect with Quentin Wood about software engineering internships, technical projects, research, and collaboration." }
+  }
+}
