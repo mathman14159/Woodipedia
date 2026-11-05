@@ -14,5 +14,6 @@ export const paths = [...new Set([
 ])]
 
 export function render(path: string) {
-  return renderToString(<StaticRouter location={path}><App /></StaticRouter>)
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  return renderToString(<StaticRouter basename={import.meta.env.BASE_URL} location={`${base}${path}`}><App /></StaticRouter>)
 }
